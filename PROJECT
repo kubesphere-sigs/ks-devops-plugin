@@ -1,0 +1,7 @@
+domain: my.domain
+repo: devops.kubesphere.io/plugin
+resources:
+- group: ship
+  kind: Frigate
+  version: v1beta1
+version: "2"

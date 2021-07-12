@@ -1,0 +1,105 @@
+name: Build
+# Need GitHub secret: DOCKER_HUB_USER, DOCKER_HUB_SECRETS, GHCR_TOKEN, CODECOV_TOKEN
+
+on:
+  push:
+    branches:
+      - master
+      - test-* # make it be easier for contributors to test
+      - basic-func # this is initial branch, it can be deleted later
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  BuildAPIServer:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Docker meta for kubesphere
+        id: meta
+        if: github.repository_owner == 'kubesphere-sigs'
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            kubespheresig/ks-devops-plugin-apiserver
+            ghcr.io/${{ github.repository_owner }}/ks-devops-plugin-apiserver
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern=v{{version}}
+            type=sha
+      - name: Docker meta for Contributors
+        id: metaContributors
+        if: github.repository_owner != 'kubesphere'
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            ghcr.io/${{ github.repository_owner }}/ks-devops-plugin-apiserver
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern=v{{version}}
+            type=sha
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USER }}
+          password: ${{ secrets.DOCKER_HUB_SECRETS }}
+      - name: Login to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_TOKEN }}
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v2.4.0
+        if: github.repository_owner == 'kubesphere-sigs'
+        with:
+          file: config/dockerfiles/apiserver/Dockerfile
+          tags: ${{ steps.meta.outputs.tags }}
+          push: ${{ github.event_name != 'pull_request' }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+      - name: Build and push Docker images for Contributors
+        uses: docker/build-push-action@v2.4.0
+        if: github.repository_owner != 'kubesphere'
+        with:
+          file: config/dockerfiles/apiserver/Dockerfile
+          tags: ${{ steps.metaContributors.outputs.tags }}
+          push: ${{ github.event_name != 'pull_request' }}
+          labels: ${{ steps.metaContributors.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+
+  UnitTest:
+    name: Test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Set up Go 1.15
+        uses: actions/setup-go@v2.1.3
+        with:
+          go-version: 1.15
+        id: go
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2.3.4
+      - name: Test
+        run: |
+          make test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.out
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
