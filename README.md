@@ -3,9 +3,11 @@
 
 ## Get started
 
+1. Install [KubeSphere](https://github.com/kubesphere/kubesphere) via [kk create cluster --with-kubesphere](https://github.com/kubesphere/kubekey/)
 1. Install this plugin via `make install-chart`
 1. Add the following configuration into ConfigMap `kubesphere-system/kubesphere-config`,
     and restart `ks-apiserver`
+1. Install [KubeSphere DevOps](https://github.com/kubesphere-sigs/ks-devops)
 
 ```
 data:
