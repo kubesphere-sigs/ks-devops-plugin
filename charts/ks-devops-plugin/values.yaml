@@ -12,6 +12,10 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "master"
 
+authentication:
+  # If not set, jwt tools will generate and set it automatically
+  jwtSecret: ""
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
