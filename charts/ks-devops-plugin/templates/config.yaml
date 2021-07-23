@@ -7,6 +7,11 @@ data:
       loginHistoryRetentionPeriod: 168h
       maximumClockSkew: 10s
       jwtSecret: {{ .Values.authentication.jwtSecret | quote }}
+    devops:
+      host: http://ks-devops-jenkins.kubesphere-devops-system
+      username: admin
+      password: 117a817dcf053ff8e03be4e53b2b710f05
+      maxConnections: 100
 kind: ConfigMap
 metadata:
   name: devops-plugin-config
