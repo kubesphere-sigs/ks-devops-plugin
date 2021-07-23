@@ -5,10 +5,12 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/kubesphere-sigs/ks-devops-plugin-apiserver
+  # it also could be docker.io/kubespheresig
+  registry: ghcr.io/kubesphere-sigs
+  repository: ks-devops-plugin-apiserver
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "basic-func"
+  tag: "master"
 
 imagePullSecrets: []
 nameOverride: ""
