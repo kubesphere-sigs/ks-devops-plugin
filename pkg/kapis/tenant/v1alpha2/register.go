@@ -36,7 +36,7 @@ import (
 )
 
 const (
-	GroupName = "tenant.kubesphere.io"
+	GroupName             = "tenant.kubesphere.io"
 	tagNamespacedResource = "Namespaced Resource"
 )
 

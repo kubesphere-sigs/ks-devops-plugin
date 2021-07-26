@@ -47,8 +47,8 @@ type Clientset struct {
 	devopsV1alpha1 *devopsv1alpha1.DevopsV1alpha1Client
 	devopsV1alpha3 *devopsv1alpha3.DevopsV1alpha3Client
 	iamV1alpha2    *iamv1alpha2.IamV1alpha2Client
-	tenantV1alpha1      *tenantv1alpha1.TenantV1alpha1Client
-	tenantV1alpha2      *tenantv1alpha2.TenantV1alpha2Client
+	tenantV1alpha1 *tenantv1alpha1.TenantV1alpha1Client
+	tenantV1alpha2 *tenantv1alpha2.TenantV1alpha2Client
 }
 
 // DevopsV1alpha1 retrieves the DevopsV1alpha1Client

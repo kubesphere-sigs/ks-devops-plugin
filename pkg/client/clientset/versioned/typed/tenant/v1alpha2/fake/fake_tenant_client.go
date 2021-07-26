@@ -19,9 +19,9 @@ limitations under the License.
 package fake
 
 import (
+	v1alpha2 "devops.kubesphere.io/plugin/pkg/client/clientset/versioned/typed/tenant/v1alpha2"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
-	v1alpha2 "devops.kubesphere.io/plugin/pkg/client/clientset/versioned/typed/tenant/v1alpha2"
 )
 
 type FakeTenantV1alpha2 struct {

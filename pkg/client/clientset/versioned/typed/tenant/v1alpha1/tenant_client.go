@@ -19,9 +19,9 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"devops.kubesphere.io/plugin/pkg/client/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 	v1alpha1 "kubesphere.io/api/tenant/v1alpha1"
-	"devops.kubesphere.io/plugin/pkg/client/clientset/versioned/scheme"
 )
 
 type TenantV1alpha1Interface interface {
