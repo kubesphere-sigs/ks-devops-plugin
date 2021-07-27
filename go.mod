@@ -9,10 +9,10 @@ require (
 	github.com/emicklei/go-restful v2.9.6+incompatible
 	github.com/emicklei/go-restful-openapi v1.4.1
 	github.com/form3tech-oss/jwt-go v3.2.2+incompatible
-	github.com/go-logr/logr v0.1.0 // indirect
 	github.com/go-openapi/spec v0.19.3
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/google/go-cmp v0.5.4
+	github.com/kubernetes-csi/external-snapshotter/client/v3 v3.0.0 // indirect
 	github.com/onsi/ginkgo v1.14.2 // indirect
 	github.com/onsi/gomega v1.10.3
 	github.com/open-policy-agent/opa v0.30.1
@@ -24,14 +24,15 @@ require (
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e
 	gopkg.in/yaml.v2 v2.4.0
 	gotest.tools v2.2.0+incompatible
-	k8s.io/api v0.18.6
+	istio.io/client-go v1.10.3 // indirect
+	k8s.io/api v0.20.2
 	k8s.io/apiextensions-apiserver v0.18.6
-	k8s.io/apimachinery v0.18.6
+	k8s.io/apimachinery v0.20.2
 	k8s.io/apiserver v0.18.6
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/component-base v0.18.6
 	k8s.io/klog v1.0.0
-	k8s.io/kube-openapi v0.0.0-20200410145947-61e04a5be9a6
+	k8s.io/kube-openapi v0.0.0-20201113171705-d219536bb9fd
 	kubesphere.io/api v0.0.0-20210511124541-08f2d682bd07
 	sigs.k8s.io/controller-runtime v0.6.0
 )

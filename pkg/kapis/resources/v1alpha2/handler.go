@@ -29,13 +29,13 @@ import (
 )
 
 type resourceHandler struct {
-	resourcesGetter     *resource.ResourceGetter
+	resourcesGetter *resource.ResourceGetter
 }
 
 func newResourceHandler(k8sClient kubernetes.Interface, factory informers.InformerFactory, masterURL string) *resourceHandler {
 
 	return &resourceHandler{
-		resourcesGetter:     resource.NewResourceGetter(factory),
+		resourcesGetter: resource.NewResourceGetter(factory),
 	}
 }
 
