@@ -22,12 +22,12 @@ import (
 	"context"
 	"time"
 
+	scheme "devops.kubesphere.io/plugin/pkg/client/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	rest "k8s.io/client-go/rest"
 	v1alpha2 "kubesphere.io/api/tenant/v1alpha2"
-	scheme "devops.kubesphere.io/plugin/pkg/client/clientset/versioned/scheme"
 )
 
 // WorkspaceTemplatesGetter has a method to return a WorkspaceTemplateInterface.

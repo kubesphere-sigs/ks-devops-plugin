@@ -26,6 +26,8 @@ import (
 	"devops.kubesphere.io/plugin/pkg/apiserver/authorization/rbac"
 	"devops.kubesphere.io/plugin/pkg/apiserver/filters"
 	"devops.kubesphere.io/plugin/pkg/apiserver/request"
+	resourcesv1alpha2 "devops.kubesphere.io/plugin/pkg/kapis/resources/v1alpha2"
+	resourcev1alpha3 "devops.kubesphere.io/plugin/pkg/kapis/resources/v1alpha3"
 	tenantv1alpha2 "devops.kubesphere.io/plugin/pkg/kapis/tenant/v1alpha2"
 	"devops.kubesphere.io/plugin/pkg/models/auth"
 	"devops.kubesphere.io/plugin/pkg/models/iam/am"
@@ -65,7 +67,6 @@ const (
 )
 
 type APIServer struct {
-
 	// number of kubesphere apiserver
 	ServerCount int
 
@@ -125,6 +126,10 @@ func (s *APIServer) installKubeSphereAPIs() {
 	urlruntime.Must(tenantv1alpha2.AddToContainer(s.container, s.InformerFactory,
 		s.KubernetesClient.Kubernetes(),
 		s.KubernetesClient.KubeSphere(), rbacAuthorizer, s.RuntimeCache))
+
+	urlruntime.Must(resourcev1alpha3.AddToContainer(s.container, s.InformerFactory, s.RuntimeCache))
+	urlruntime.Must(resourcesv1alpha2.AddToContainer(s.container, s.KubernetesClient.Kubernetes(), s.InformerFactory,
+		s.KubernetesClient.Master()))
 }
 
 func (s *APIServer) Run(stopCh <-chan struct{}) (err error) {

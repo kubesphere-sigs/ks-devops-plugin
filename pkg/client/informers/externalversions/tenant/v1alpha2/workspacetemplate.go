@@ -22,14 +22,14 @@ import (
 	"context"
 	time "time"
 
+	versioned "devops.kubesphere.io/plugin/pkg/client/clientset/versioned"
+	internalinterfaces "devops.kubesphere.io/plugin/pkg/client/informers/externalversions/internalinterfaces"
+	v1alpha2 "devops.kubesphere.io/plugin/pkg/client/listers/tenant/v1alpha2"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
 	tenantv1alpha2 "kubesphere.io/api/tenant/v1alpha2"
-	versioned "devops.kubesphere.io/plugin/pkg/client/clientset/versioned"
-	internalinterfaces "devops.kubesphere.io/plugin/pkg/client/informers/externalversions/internalinterfaces"
-	v1alpha2 "devops.kubesphere.io/plugin/pkg/client/listers/tenant/v1alpha2"
 )
 
 // WorkspaceTemplateInformer provides access to a shared informer and lister for
