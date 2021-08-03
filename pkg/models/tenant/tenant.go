@@ -28,7 +28,6 @@ import (
 	kubesphere "devops.kubesphere.io/plugin/pkg/client/clientset/versioned"
 	"devops.kubesphere.io/plugin/pkg/informers"
 	resourcesv1alpha3 "devops.kubesphere.io/plugin/pkg/models/resources/v1alpha3/resource"
-	resourcev1alpha3 "devops.kubesphere.io/plugin/pkg/models/resources/v1alpha3/resource"
 )
 
 const orphanFinalizer = "orphan.finalizers.kubesphere.io"
@@ -46,9 +45,9 @@ type tenantOperator struct {
 }
 
 func New(informers informers.InformerFactory, k8sclient kubernetes.Interface,
-	ksclient kubesphere.Interface, authorizer authorizer.Authorizer,
-	resourceGetter *resourcev1alpha3.ResourceGetter) Interface {
+	ksclient kubesphere.Interface, am am.AccessManagementInterface, authorizer authorizer.Authorizer) Interface {
 	return &tenantOperator{
+		am:             am,
 		authorizer:     authorizer,
 		resourceGetter: resourcesv1alpha3.NewResourceGetter(informers, nil),
 		k8sclient:      k8sclient,

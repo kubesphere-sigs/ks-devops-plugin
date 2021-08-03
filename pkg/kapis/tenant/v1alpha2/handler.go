@@ -19,6 +19,7 @@ package v1alpha2
 import (
 	"devops.kubesphere.io/plugin/pkg/apiserver/authorization/authorizer"
 	"devops.kubesphere.io/plugin/pkg/informers"
+	"devops.kubesphere.io/plugin/pkg/models/iam/am"
 	"fmt"
 	"k8s.io/client-go/kubernetes"
 
@@ -30,7 +31,6 @@ import (
 	"devops.kubesphere.io/plugin/pkg/apiserver/query"
 	"devops.kubesphere.io/plugin/pkg/apiserver/request"
 	kubesphere "devops.kubesphere.io/plugin/pkg/client/clientset/versioned"
-	resourcev1alpha3 "devops.kubesphere.io/plugin/pkg/models/resources/v1alpha3/resource"
 	"devops.kubesphere.io/plugin/pkg/models/tenant"
 )
 
@@ -39,9 +39,9 @@ type tenantHandler struct {
 }
 
 func newTenantHandler(factory informers.InformerFactory, k8sclient kubernetes.Interface,
-	ksclient kubesphere.Interface, authorizer authorizer.Authorizer, resourceGetter *resourcev1alpha3.ResourceGetter) *tenantHandler {
+	ksclient kubesphere.Interface, am am.AccessManagementInterface, authorizer authorizer.Authorizer) *tenantHandler {
 	return &tenantHandler{
-		tenant: tenant.New(factory, k8sclient, ksclient, authorizer, resourceGetter),
+		tenant: tenant.New(factory, k8sclient, ksclient, am, authorizer),
 	}
 }
 

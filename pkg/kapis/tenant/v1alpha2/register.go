@@ -17,9 +17,9 @@ limitations under the License.
 package v1alpha2
 
 import (
+	"devops.kubesphere.io/plugin/pkg/models/iam/am"
 	"net/http"
 
-	resourcev1alpha3 "devops.kubesphere.io/plugin/pkg/models/resources/v1alpha3/resource"
 	"github.com/emicklei/go-restful"
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	corev1 "k8s.io/api/core/v1"
@@ -47,11 +47,11 @@ func Resource(resource string) schema.GroupResource {
 }
 
 func AddToContainer(c *restful.Container, factory informers.InformerFactory, k8sclient kubernetes.Interface,
-	ksclient kubesphere.Interface, authorizer authorizer.Authorizer,
+	ksclient kubesphere.Interface, am am.AccessManagementInterface, authorizer authorizer.Authorizer,
 	cache cache.Cache) error {
 
 	ws := runtime.NewWebService(GroupVersion)
-	handler := newTenantHandler(factory, k8sclient, ksclient, authorizer, resourcev1alpha3.NewResourceGetter(factory, cache))
+	handler := newTenantHandler(factory, k8sclient, ksclient, am, authorizer)
 
 	ws.Route(ws.GET("/workspaces/{workspace}/devops").
 		To(handler.ListDevOpsProjects).
