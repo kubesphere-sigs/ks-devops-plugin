@@ -1,6 +1,9 @@
-
 # Image URL to use all building/pushing image targets
-IMG ?= controller:latest
+COMMIT := $(shell git rev-parse --short HEAD)
+VERSION := dev-$(shell git describe --tags $(shell git rev-list --tags --max-count=1))
+REPO ?= kubespheredev
+IMG ?= $(REPO)/ks-devops-plugin-apiserver:$(VERSION)-$(COMMIT)
+
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS ?= "crd:trivialVersions=true"
 
@@ -17,26 +20,9 @@ all: manager
 test: fmt vet
 	go test ./... -coverprofile coverage.out
 
-# Build manager binary
-manager: generate fmt vet
-	go build -o bin/manager main.go
-
 # Run against the configured Kubernetes cluster in ~/.kube/config
-run: generate fmt vet manifests
-	go run ./main.go
-
-# Install CRDs into a cluster
-install: manifests
-	kustomize build config/crd | kubectl apply -f -
-
-# Uninstall CRDs from a cluster
-uninstall: manifests
-	kustomize build config/crd | kubectl delete -f -
-
-# Deploy controller in the configured Kubernetes cluster in ~/.kube/config
-deploy: manifests
-	cd config/manager && kustomize edit set image controller=${IMG}
-	kustomize build config/default | kubectl apply -f -
+run: fmt vet
+	go run cmd/apiserver/apiserver.go
 
 lint-chart:
 	helm lint charts/ks-devops-plugin
@@ -69,8 +55,8 @@ generate: controller-gen
 	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
 
 # Build the docker image
-docker-build: test
-	docker build . -t ${IMG}
+docker-build:
+	docker build . -f config/dockerfiles/apiserver/Dockerfile -t ${IMG}
 
 # Push the docker image
 docker-push:

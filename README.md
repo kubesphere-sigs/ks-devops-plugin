@@ -15,3 +15,10 @@ data:
     devops:
       devopsPluginServiceAddress: ks-devops-plugin.kubesphere-devops-system:9090
 ```
+
+## Build from source
+
+```
+export REPO=your-docker-hub-name
+make docker-build docker-push
+```
