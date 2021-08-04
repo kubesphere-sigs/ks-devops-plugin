@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  # it also could be docker.io/kubespheresig
+  # it also could be docker.io/kubespheredev
   registry: ghcr.io/kubesphere-sigs
   repository: ks-devops-plugin-apiserver
   pullPolicy: IfNotPresent

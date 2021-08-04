@@ -24,7 +24,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            kubespheresig/ks-devops-plugin-apiserver
+            kubespheredev/ks-devops-plugin-apiserver
             ghcr.io/${{ github.repository_owner }}/ks-devops-plugin-apiserver
           tags: |
             type=schedule
