@@ -125,7 +125,7 @@ func (s *APIServer) installKubeSphereAPIs() {
 
 	urlruntime.Must(tenantv1alpha2.AddToContainer(s.container, s.InformerFactory,
 		s.KubernetesClient.Kubernetes(),
-		s.KubernetesClient.KubeSphere(), rbacAuthorizer, s.RuntimeCache))
+		s.KubernetesClient.KubeSphere(), amOperator, rbacAuthorizer, s.RuntimeCache))
 
 	urlruntime.Must(resourcev1alpha3.AddToContainer(s.container, s.InformerFactory, s.RuntimeCache))
 	urlruntime.Must(resourcesv1alpha2.AddToContainer(s.container, s.KubernetesClient.Kubernetes(), s.InformerFactory,
