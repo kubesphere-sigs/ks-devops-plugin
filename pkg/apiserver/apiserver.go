@@ -26,11 +26,16 @@ import (
 	"devops.kubesphere.io/plugin/pkg/apiserver/authorization/rbac"
 	"devops.kubesphere.io/plugin/pkg/apiserver/filters"
 	"devops.kubesphere.io/plugin/pkg/apiserver/request"
+	iamapi "devops.kubesphere.io/plugin/pkg/kapis/iam/v1alpha2"
 	resourcesv1alpha2 "devops.kubesphere.io/plugin/pkg/kapis/resources/v1alpha2"
 	resourcev1alpha3 "devops.kubesphere.io/plugin/pkg/kapis/resources/v1alpha3"
 	tenantv1alpha2 "devops.kubesphere.io/plugin/pkg/kapis/tenant/v1alpha2"
 	"devops.kubesphere.io/plugin/pkg/models/auth"
 	"devops.kubesphere.io/plugin/pkg/models/iam/am"
+	"devops.kubesphere.io/plugin/pkg/models/iam/group"
+	"devops.kubesphere.io/plugin/pkg/models/iam/im"
+	"devops.kubesphere.io/plugin/pkg/models/resources/v1alpha3/loginrecord"
+	"devops.kubesphere.io/plugin/pkg/models/resources/v1alpha3/user"
 	"fmt"
 	"k8s.io/apiserver/pkg/authentication/authenticator"
 	"k8s.io/apiserver/pkg/authentication/request/bearertoken"
@@ -118,6 +123,11 @@ func (s *APIServer) PrepareRun(stopCh <-chan struct{}) error {
 // Installation happens before all informers start to cache objects, so
 //   any attempt to list objects using listers will get empty results.
 func (s *APIServer) installKubeSphereAPIs() {
+	imOperator := im.NewOperator(s.KubernetesClient.KubeSphere(),
+		user.New(s.InformerFactory.KubeSphereSharedInformerFactory(),
+			s.InformerFactory.KubernetesSharedInformerFactory()),
+		loginrecord.New(s.InformerFactory.KubeSphereSharedInformerFactory()),
+		s.Config.AuthenticationOptions)
 	amOperator := am.NewOperator(s.KubernetesClient.KubeSphere(),
 		s.KubernetesClient.Kubernetes(),
 		s.InformerFactory)
@@ -130,6 +140,10 @@ func (s *APIServer) installKubeSphereAPIs() {
 	urlruntime.Must(resourcev1alpha3.AddToContainer(s.container, s.InformerFactory, s.RuntimeCache))
 	urlruntime.Must(resourcesv1alpha2.AddToContainer(s.container, s.KubernetesClient.Kubernetes(), s.InformerFactory,
 		s.KubernetesClient.Master()))
+
+	urlruntime.Must(iamapi.AddToContainer(s.container, imOperator, amOperator,
+		group.New(s.InformerFactory, s.KubernetesClient.KubeSphere(), s.KubernetesClient.Kubernetes()),
+		rbacAuthorizer))
 }
 
 func (s *APIServer) Run(stopCh <-chan struct{}) (err error) {
